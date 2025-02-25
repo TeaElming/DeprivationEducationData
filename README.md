@@ -10,21 +10,21 @@ The Deprivation and Education Tracker application provides insights into educati
 * Compare individual LSOA data with averages across the chosen decile.
 * Interactive map to select LSOAs visually.
 * Filterable LSOA list for easy navigation.
-* Dynamic data visualization using graphs and maps.
+* Dynamic data visualisation using graphs and maps.
 
 ## Technology Stack
 ### Backend
 
 * Node.js and Express: Used to create the backend server and RESTful API.
 * MySQL: Database for storing LSOA and education data.
-* Sequelize: An Object-Relational Mapper (ORM) for managing and querying the MySQL database.
+* Sequelise: An Object-Relational Mapper (ORM) for managing and querying the MySQL database.
 * Inversify and Reflect-metadata: Used to implement dependency injection, enhancing the scalability and maintainability of the MVC structure.
 
 ## Frontend
 
 * d3.js: JavaScript library for creating interactive data visualizations in the browser.
 * Leaflet: Mapping library used to display LSOAs on an interactive map.
-* GeoJSON: Format for representing geographical data, integrated into the map with Leaflet for visualizing LSOA boundaries.
+* GeoJSON: Format for representing geographical data, integrated into the map with Leaflet for visualising LSOA boundaries.
 
 ## How to Use the Application
 
@@ -41,12 +41,12 @@ You can access the live version of the Deprivation and Education Tracker here:
 
 ## Additional Features
 
-* Optimized Data Loading: Data is fetched on demand, reducing unnecessary database queries. Pagination is used to handle large datasets efficiently, ensuring only the necessary data is loaded into the DOM.
+* Optimised Data Loading: Data is fetched on demand, reducing unnecessary database queries. Pagination is used to handle large datasets efficiently, ensuring only the necessary data is loaded into the DOM.
 * Backend Data Processing: Most data manipulation is handled on the backend, improving performance and scalability.
 * Potential Enhancements: The performance could be further improved by integrating ElasticSearch and indexing for faster data retrieval.
 
 ## Future Improvements
 
-While the current system is efficient in handling large datasets and providing interactive visualization, additional features such as ElasticSearch integration could significantly improve search speed and responsiveness, especially when handling large datasets.
+While the current system is efficient in handling large datasets and providing interactive visualisation, additional features such as ElasticSearch integration could significantly improve search speed and responsiveness, especially when handling large datasets.
 
-The core focus of data manipulation remains on the backend using MySQL and Sequelize, ensuring a smooth and responsive experience on the frontend with d3.js visualizations and Leaflet-powered mapping.
+The core focus of data manipulation remains on the backend using MySQL and Sequelize, ensuring a smooth and responsive experience on the frontend with d3.js visualisations and Leaflet-powered mapping.
