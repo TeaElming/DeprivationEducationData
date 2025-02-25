@@ -12,7 +12,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Sample URL for your GeoJSON data (adjust according to your actual data source)
 const geoJsonUrl =
-  'https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Lower_layer_Super_Output_Areas_2021_EW_BGC_V3/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=geojson'
+  'https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Lower_layer_Super_Output_Areas_December_2021_Boundaries_EW_BFE_V10/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=geojson'
 
 // Initialize the GeoJSON layer without adding it to the map yet
 const geoJsonLayer = L.geoJSON(null, {
@@ -58,7 +58,8 @@ fetch(geoJsonUrl)
   .then((response) => response.json())
   .then((data) => {
     geoJsonLayer.addData(data)
-    updateLayerVisibility() // Ensure correct visibility at start
+    map.addLayer(geoJsonLayer) // Ensure it's added
+    updateLayerVisibility() // Hide/show based on zoom level
   })
   .catch((error) => console.error('Error loading the GeoJSON data: ', error))
 

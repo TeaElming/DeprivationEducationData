@@ -6,30 +6,18 @@ export class ListOfLsoas {
     this.totalPages = 0
     this.filteredAreas = []
     this.lsoaGraph = new LsoaGraph()
+
     this.setupListeners()
     this.fetchData()
+
+    // Attach search event listener once
+    const searchInput = document.getElementById('searchInput')
+    searchInput.addEventListener('input', () => {
+      this.filterAreas(searchInput.value.toLowerCase())
+      this.renderPage(1)
+    })
   }
 
-  /**
-   * Fetches data from the server and renders the results on the page.
-   *
-   * @memberof listOfLsoas
-   */
-  /*async fetchData() {
-    try {
-      const response = await fetch('/fetch-geo-code-names', {
-        method: 'GET',
-      })
-      if (!response.ok) {
-        throw new Error('Failed to fetch data')
-      }
-      const data = await response.json()
-      this.renderResults(data)
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-  }
-*/
   /**
    * Renders the search results on the page.
    *
@@ -58,8 +46,8 @@ export class ListOfLsoas {
    * @param {String} searchTerm - The search term to filter the areas, either code or name.
    * @memberof listOfLsoas
    */
-  filterAreas(data, searchTerm) {
-    this.filteredAreas = data.areas.filter(
+  filterAreas(searchTerm) {
+    this.filteredAreas = this.fullData.filter(
       (area) =>
         area.geography_code.toLowerCase().includes(searchTerm) ||
         area.geography.toLowerCase().includes(searchTerm)
@@ -67,35 +55,6 @@ export class ListOfLsoas {
     this.totalPages = Math.ceil(this.filteredAreas.length / 20)
   }
 
-  /**
-   * Renders a specific page of the search results.
-   *
-   * @param {string} pageNumber - the page number is entered as a string
-   * @memberof listOfLsoas
-   */
-  /*renderPage(pageNumber) {
-    const startIdx = (pageNumber - 1) * 20
-    const endIdx = Math.min(startIdx + 20, this.filteredAreas.length)
-    const pageItems = this.filteredAreas.slice(startIdx, endIdx)
-
-    const resultsContainer = document.getElementById('resultsContainer')
-    resultsContainer.innerHTML = ''
-
-    pageItems.forEach((area) => {
-      const row = document.createElement('div')
-      row.classList.add('row')
-      row.innerHTML = `
-        <span class="geocode">${area.geography_code}</span>
-        <span class="name">${area.geography}</span>
-      `
-      row.addEventListener('click', () => this.handleClick(area.geography_code))
-      resultsContainer.appendChild(row)
-    })
-
-    this.currentPage = pageNumber
-    this.updatePagination()
-  }
-*/
   /**
    * Sets up the event listeners for the pagination buttons.
    *
@@ -159,48 +118,51 @@ export class ListOfLsoas {
     this.lsoaGraph.manipulateGeoCodeData(geocode)
   }
 
-
-
   async fetchData() {
     try {
-      const response = await fetch('/fetch-geo-code-names', {
-        method: 'GET',
-      });
+      const response = await fetch('/fetch-geo-code-names', { method: 'GET' })
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error('Failed to fetch data')
       }
-      const data = await response.json();
-      this.fullData = data.areas;
-      this.totalPages = Math.ceil(data.areas.length / 100);  // Adjust page size here
-      this.renderPage(1);
+      const data = await response.json()
+      console.log('Data fetched: ', data)
+
+      this.fullData = data.areas
+      this.filteredAreas = [...this.fullData] // Ensure filtering works
+      this.totalPages = Math.ceil(this.filteredAreas.length / 20) // Use filtered data
+
+      // Update the total LSOA count in the UI
+      const totalLSOAsElement = document.getElementById('totalLSOAs')
+      totalLSOAsElement.textContent = this.fullData.length
+
+      this.renderPage(1)
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching data:', error)
     }
   }
 
   // Override renderPage to handle large datasets more efficiently
   renderPage(pageNumber) {
-    const pageSize = 20; // Number of items to show per page
-    const startIdx = (pageNumber - 1) * pageSize;
-    const endIdx = startIdx + pageSize;
-    const pageItems = this.fullData.slice(startIdx, endIdx);
+    const pageSize = 20
+    const startIdx = (pageNumber - 1) * pageSize
+    const endIdx = startIdx + pageSize
+    const pageItems = this.filteredAreas.slice(startIdx, endIdx) // Use filtered data
 
-    const resultsContainer = document.getElementById('resultsContainer');
-    resultsContainer.innerHTML = '';
+    const resultsContainer = document.getElementById('resultsContainer')
+    resultsContainer.innerHTML = ''
 
     pageItems.forEach((area) => {
-      const row = document.createElement('div');
-      row.classList.add('row');
+      const row = document.createElement('div')
+      row.classList.add('row')
       row.innerHTML = `
         <span class="geocode">${area.geography_code}</span>
         <span class="name">${area.geography}</span>
-      `;
-      row.addEventListener('click', () => this.handleClick(area.geography_code));
-      resultsContainer.appendChild(row);
-    });
+      `
+      row.addEventListener('click', () => this.handleClick(area.geography_code))
+      resultsContainer.appendChild(row)
+    })
 
-    this.currentPage = pageNumber;
-    this.updatePagination();
+    this.currentPage = pageNumber
+    this.updatePagination()
   }
-
 }
